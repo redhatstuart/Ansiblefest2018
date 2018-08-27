@@ -8,13 +8,6 @@
 
 ---
 - hosts: localhost
-  vars:
-    resource_group: vmsstestrg
-    vmss_name: vmsstest
-    location: eastus
-    admin_username: "{{ lookup('env','VMSS_ADMIN_USERNAME') }}"
-    admin_password: "{{ lookup('env','VMSS_ADMIN_PASSWORD') }}"
-
   tasks:
     - name: Create a resource group
       azure_rm_resourcegroup:
@@ -84,17 +77,6 @@
         managed_disk_type: Standard_LRS
         os_disk_caching: ReadWrite
         image:
-          offer: UbuntuServer
-          publisher: Canonical
-          sku: 16.04-LTS
-          version: latest
+          name: "{{ vm_image_name }}"
+          resource_group: "{{ resource_group }}"
         load_balancer: "{{ vmss_name }}lb"
-        data_disks:
-          - lun: 0
-            disk_size_gb: 20
-            managed_disk_type: Standard_LRS
-            caching: ReadOnly
-          - lun: 1
-            disk_size_gb: 30
-            managed_disk_type: Standard_LRS
-            caching: ReadOnly

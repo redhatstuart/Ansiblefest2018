@@ -2,4 +2,7 @@
 resource_group: ansiblefestrg
 vm_name: ansiblefestvm
 location: eastus
-
+vmss_name: vmsstest
+admin_username: zim #"{{ lookup('env','VMSS_ADMIN_USERNAME') }}"
+admin_password: Password123!! #"{{ lookup('env','VMSS_ADMIN_PASSWORD') }}"
+vm_image_name: ansiblefestvmimage

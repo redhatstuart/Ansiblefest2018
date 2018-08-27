@@ -43,5 +43,5 @@
   - name: Create an image from a virtual machine
     azure_rm_image:
       resource_group: "{{ resource_group }}"
-      name: zimsvmimage
+      name: "{{ vm_image_name }}"
       source: "{{ vm_name }}"
