@@ -1,0 +1,5 @@
+---
+resource_group: ansiblefestrg
+vm_name: ansiblefestvm
+location: eastus
+
