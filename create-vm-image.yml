@@ -29,10 +29,6 @@
       name: "{{ vm_name }}"
     register: output
 
-  - name: Dump PIP output
-    debug:
-      var: output
-
   - name: Add host to the list
     add_host:
       groups: temporaryhosts
