@@ -10,22 +10,26 @@
     azure_rm_resourcegroup:
       name: "{{ resource_group }}"
       location: "{{ location }}"
+
   - name: Create virtual network
     azure_rm_virtualnetwork:
       resource_group: "{{ resource_group }}"
       name: "{{ vm_name }}"
       address_prefixes: "10.0.0.0/16"
+
   - name: Add subnet
     azure_rm_subnet:
       resource_group: "{{ resource_group }}"
       name: "{{ vm_name }}"
       address_prefix: "10.0.1.0/24"
       virtual_network: "{{ vm_name }}"
+
   - name: Create public IP address
     azure_rm_publicipaddress:
       resource_group: "{{ resource_group }}"
       allocation_method: Static
       name: "{{ vm_name }}"
+
   - name: Create Network Security Group that allows SSH
     azure_rm_securitygroup:
       resource_group: "{{ resource_group }}"
@@ -37,6 +41,7 @@
           access: Allow
           priority: 1001
           direction: Inbound
+
   - name: Create virtual network inteface card
     azure_rm_networkinterface:
       resource_group: "{{ resource_group }}"
