@@ -1,0 +1,17 @@
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+    - name: Deploy ARM Template - CentOS VM
+      azure_rm_deployment:
+        state: present
+        cloud_environment: AzureCloud
+        location: eastus2
+        resource_group_name: AnsibleTestCentOSRG
+        parameters:
+          adminUsername:
+            value: ansibleadmin
+          sshKeyData:
+            value: "REPLACE"
+        template_link: 'https://raw.githubusercontent.com/stuartatmicrosoft/ansible-playbook-repo/master/centos7-prem.json'
+      register: azure

@@ -1,0 +1,17 @@
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+    - name: Create (or update) PostgreSQL Server
+      azure_rm_postgresqlserver:
+        resource_group: gbbready19
+        name: gbbready19
+        sku:
+          name: GP_Gen4_2
+          tier: GeneralPurpose
+          capacity: 2
+        location: westus
+        storage_mb: 128000
+        enforce_ssl: True
+        admin_username: gbbdemo
+        admin_password: P4ssW0rd!
