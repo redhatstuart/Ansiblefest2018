@@ -4,9 +4,6 @@
   hosts: localhost
   connection: local
   tasks:
-    - name: Capture VM Image
-    hosts: localhost
-    tasks:
     - name: Stop VM before it can be generalized and image captured
       azure_rm_virtualmachine:
         resource_group: "{{ resource_group }}"
@@ -30,10 +27,3 @@
         resource_group: "{{ resource_group }}"
         name: "{{ vm_image_name }}"
         source: "{{ vm_name }}"
-
-    - name: Delete temporary VM
-      azure_rm_virtualmachine:
-        resource_group: "{{ resource_group }}"
-        name: "{{ vm_name }}"
-        remove_on_absent: none
-        state: absent
