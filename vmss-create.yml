@@ -9,22 +9,26 @@
 ---
 - hosts: localhost
   tasks:
+
     - name: Create virtual network
       azure_rm_virtualnetwork:
         resource_group: "{{ resource_group }}"
         name: "{{ vmss_name }}"
         address_prefixes: "10.0.0.0/16"
+
     - name: Add subnet
       azure_rm_subnet:
         resource_group: "{{ resource_group }}"
         name: "{{ vmss_name }}"
         address_prefix: "10.0.1.0/24"
         virtual_network: "{{ vmss_name }}"
+
     - name: Create public IP address
       azure_rm_publicipaddress:
         resource_group: "{{ resource_group }}"
         allocation_method: Static
         name: "{{ vmss_name }}"
+
     - name: Create Network Security Group that allows SSH
       azure_rm_securitygroup:
         resource_group: "{{ resource_group }}"
