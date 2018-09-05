@@ -6,6 +6,12 @@
   hosts: localhost
   connection: local
   tasks:
+
+  - name: First make sure resource group is empty
+    azure_rm_resourcegroup:
+      name: "{{ resource_group }}"
+      location: "{{ location }}"
+
   - name: Create a resource group
     azure_rm_resourcegroup:
       name: "{{ resource_group }}"

@@ -1,0 +1,72 @@
+
+---
+- name: Create Azure VM
+  hosts: localhost
+  connection: local
+  tasks:
+  - name: Create VM
+    azure_rm_virtualmachine:
+      resource_group: "{{ resource_group }}"
+      name: "{{ vm_name }}"
+      vm_size: Standard_DS1_v2
+      admin_username: "{{ admin_username }}"
+      admin_password: "{{ admin_password }}"
+      network_interfaces: "{{ vm_name }}"
+      storage_account_name: zimsstorageaccx
+      storage_container_name: vhds
+      storage_blob: blob.vhd
+      image:
+        offer: UbuntuServer
+        publisher: Canonical
+        sku: 16.04-LTS
+        version: latest
+    register: output
+
+  # do whatever is necessary to this vm
+  - name: get public ip facts
+    azure_rm_publicipaddress_facts:
+      resource_group: "{{ resource_group }}"
+      name: "{{ vm_name }}"
+    register: output
+
+  - name: Add host to the list
+    add_host:
+      groups: temporaryhosts
+      hostname: "temporaryhost"
+      ansible_host: "{{ output.ansible_facts.azure_publicipaddresses[0].properties.ipAddress }}"
+      ansible_port: 22
+      ansible_ssh_user: "{{ admin_username }}"
+      ansible_ssh_pass: "{{ admin_password }}"
+
+  - name: Git Clone sample app
+    git:
+      repo: https://github.com/spring-guides/gs-spring-boot.git
+      dest: ~/src/helloworld
+
+  - name: Build sample app
+    shell: mvn package chdir="~/src/helloworld/complete"
+
+- name: Install JRE on VMSS
+  hosts: temporaryhosts
+  become: yes
+  vars:
+    workspace: ~/src/helloworld
+
+  tasks:
+  - name: Install JRE
+    apt:
+      name: default-jre
+      update_cache: yes
+
+
+  - name: Copy app to Azure VM
+    copy:
+      src: "{{ workspace }}/complete/target/gs-spring-boot-0.1.0.jar"
+      dest: "/home/{{ admin_username }}/helloworld.jar"
+      force: yes
+      mode: 0755
+
+  - name: Start the app
+    shell: java -jar "/home/{{ admin_username }}/helloworld.jar" >/dev/null 2>&1 &
+    async: 5000
+    poll: 0
