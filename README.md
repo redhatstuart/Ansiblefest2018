@@ -70,3 +70,11 @@ and currently also a few prerequisites:
 - network security group
 
 I think these can be moved to prerequisites, as they could be reused by all the other tasks before.
+
+TODO: I think we shouldn't create load balancer here, instead application gateway should take over this role in the next task.
+
+### appgateway-create.yml
+
+This taks creates Application Gateway.
+
+TODO: this task requires some more work
