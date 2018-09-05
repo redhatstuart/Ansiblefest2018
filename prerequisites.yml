@@ -2,7 +2,7 @@
 # ===========
 # This playbook create an Azure VM with public IP, and open 22 port for SSH
 
-- name: Create Azure VM
+- name: Prerequisites for Ansible Demos
   hosts: localhost
   connection: local
   tasks:
@@ -13,7 +13,7 @@
       location: "{{ location }}"
       state: absent
 
-  - name: Create a resource group
+  - name: Create a new resource group
     azure_rm_resourcegroup:
       name: "{{ resource_group }}"
       location: "{{ location }}"
