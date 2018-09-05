@@ -25,6 +25,31 @@ Should be run before the event.
 It will create all required prerequisites:
 - create empty resource group
 
+TODO: decide what prerequisites we actually need
+
+### create-vm-using-playbook.yml
+
+This task can / will be replaced by other task (creating VM using template).
+Currently it does following:
+- installs prerequisites for the virtual machine
+- creates virtual machine
+
+TODO: make sure VM is added to hosts
+
+### install-java-app-on-vm.yml
+
+This task does following things:
+- obtains IP address of vm by it's name **vm_name**
+- add host to the list (this and previous task should be probably done beforehand)
+- clones and builds the application on local host
+- installs JRE on the virtual machine
+- copies the application to the virtual machine
+- runs the application on the remote machine
+
+TODO: VM should be added to hosts beforehand
+TODO: make sure application is automatically started when VM is restarted
+TODO: check what application we actually want to run
+
 ### create-vm-image.yml
 
 This task will take existing VM and:
