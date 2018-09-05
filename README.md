@@ -2,7 +2,7 @@
 Content for Ansible Fest 2018
 
 ## Demo Steps
-add
+
 Service principal description - generate
 Populate credentials file       
 Deploy two VMs from playbooks for Mattermost - azure_rm_virtualmachine          Deploy Ansible Role to configure first server as MySQL
@@ -13,6 +13,7 @@ Store VM image deployed from ARM template
 Create 2 node Scale Set from stored ARM template image
 Scale Out VMSS to 3 nodes
 Application Gateway?
+
 
 ## vars.yml
 
