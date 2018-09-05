@@ -11,6 +11,7 @@
     azure_rm_resourcegroup:
       name: "{{ resource_group }}"
       location: "{{ location }}"
+      force: yes
       state: absent
 
   - name: Create a new resource group
