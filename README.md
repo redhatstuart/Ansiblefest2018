@@ -1,6 +1,19 @@
 # Ansiblefest2018
 Content for Ansible Fest 2018
 
+## Demo Steps
+
+Service principal description - generate
+Populate credentials file       
+Deploy two VMs from playbooks for Mattermost - azure_rm_virtualmachine          Deploy Ansible Role to configure first server as MySQL
+Deploy Mattermost application to second server
+Deploy VM from ARM template
+Install Tomcat (or othe application) on VM
+Store VM image deployed from ARM template
+Create 2 node Scale Set from stored ARM template image
+Scale Out VMSS to 3 nodes
+Application Gateway?
+
 ## vars.yml
 
 This file contains all the variables shared by demo tasks:
