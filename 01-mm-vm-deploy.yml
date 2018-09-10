@@ -3,7 +3,6 @@
   connection: local
 
   vars:
-    appserver: mm-app-demo
     appserverdns: mm-app-demo
     dbserver: mm-db-demo
     dbserverdns: mm-db-demo
@@ -26,7 +25,7 @@
   - name: Create Mattermost Server & Proxy VM Public IP Address
     azure_rm_publicipaddress:
       resource_group: '{{ resource_group }}'
-      name: '{{ appserver }}-pip'
+      name: '{{ vm_name }}-pip'
       allocation_method: Static
       domain_name: '{{ appserverdns }}'
 
@@ -40,7 +39,7 @@
   - name: Create Mattermost Server & Proxy NSG
     azure_rm_securitygroup:
       resource_group: '{{ resource_group }}'
-      name: '{{ appserver }}-nsg'
+      name: '{{ vm_name }}-nsg'
       rules:
           - name: 'AllowMatterMost'
             access: Allow
@@ -75,11 +74,11 @@
 
   - name: Create Mattermost Server & Proxy VM NIC
     azure_rm_networkinterface:
-      name: '{{ appserver }}-nic'
+      name: '{{ vm_name }}-nic'
       os_type: Linux
-      public_ip_address_name: '{{ appserver }}-pip'
+      public_ip_address_name: '{{ vm_name }}-pip'
       resource_group: '{{ resource_group }}'
-      security_group_name: '{{ appserver }}-nsg'
+      security_group_name: '{{ vm_name }}-nsg'
       subnet_name: MMSubnet
       virtual_network_name: MMVnet
 
@@ -98,11 +97,11 @@
       admin_username: "{{ username }}"
       location: '{{ location }}'
       managed_disk_type: Standard_LRS
-      name: '{{ appserver }}'
-      network_interface_names: '{{ appserver }}-nic'
+      name: '{{ vm_name }}'
+      network_interface_names: '{{ vm_name }}-nic'
       os_type: Linux
       resource_group: '{{ resource_group }}'
-      short_hostname: '{{ appserver }}'
+      short_hostname: '{{ vm_name }}'
       vm_size: Standard_DS3_v2
       ssh_password_enabled: false
       ssh_public_keys:
