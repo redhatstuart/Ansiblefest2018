@@ -5,51 +5,41 @@
   vars:
     appserver: mm-app-demo
     appserverdns: mm-app-demo
-    azuredc: eastus2
-    cloudenv: AzureCloud
-#   cloudenv: AzureUSGovernment
     dbserver: mm-db-demo
     dbserverdns: mm-db-demo
     username: mmuser
-    rgname: mm-demo
 
   tasks:
-  - name: Create Mattermost RG
-    azure_rm_resourcegroup:
-      cloud_environment: '{{ cloudenv }}'
-      name: '{{ rgname }}'
-      location: '{{ azuredc }}'
-
   - name: Create Mattermost VNet
     azure_rm_virtualnetwork:
-      resource_group: '{{ rgname }}'
+      resource_group: '{{ resource_group }}'
       name: MMVNet
       address_prefixes: "10.10.0.0/16"
 
   - name: Create Mattermost Subnet
     azure_rm_subnet:
-      resource_group: '{{ rgname }}'
+      resource_group: '{{ resource_group }}'
       name: MMSubnet
       address_prefix: "10.10.0.0/24"
       virtual_network: MMVNet
 
   - name: Create Mattermost Server & Proxy VM Public IP Address
     azure_rm_publicipaddress:
-      resource_group: '{{ rgname }}'
+      resource_group: '{{ resource_group }}'
       name: '{{ appserver }}-pip'
       allocation_method: Static
       domain_name: '{{ appserverdns }}'
 
   - name: Create Mattermost Database Server VM Public IP Address
     azure_rm_publicipaddress:
-      resource_group: '{{ rgname }}'
+      resource_group: '{{ resource_group }}'
       name: '{{ dbserver }}-pip'
       allocation_method: Static
       domain_name: '{{ dbserverdns }}'
 
   - name: Create Mattermost Server & Proxy NSG
     azure_rm_securitygroup:
-      resource_group: '{{ rgname }}'
+      resource_group: '{{ resource_group }}'
       name: '{{ appserver }}-nsg'
       rules:
           - name: 'AllowMatterMost'
@@ -67,7 +57,7 @@
 
   - name: Create Database Server NSG
     azure_rm_securitygroup:
-      resource_group: '{{ rgname }}'
+      resource_group: '{{ resource_group }}'
       name: '{{ dbserver }}-nsg'
       rules:
           - name: 'AllowMySQL'
@@ -88,7 +78,7 @@
       name: '{{ appserver }}-nic'
       os_type: Linux
       public_ip_address_name: '{{ appserver }}-pip'
-      resource_group: '{{ rgname }}'
+      resource_group: '{{ resource_group }}'
       security_group_name: '{{ appserver }}-nsg'
       subnet_name: MMSubnet
       virtual_network_name: MMVnet
@@ -98,7 +88,7 @@
       name: '{{ dbserver }}-nic'
       os_type: Linux
       public_ip_address_name: '{{ dbserver }}-pip'
-      resource_group: '{{ rgname }}'
+      resource_group: '{{ resource_group }}'
       security_group_name: '{{ dbserver }}-nsg'
       subnet_name: MMSubnet
       virtual_network_name: MMVnet
@@ -106,19 +96,18 @@
   - name: Create Mattermost Server & Proxy VM
     azure_rm_virtualmachine:
       admin_username: '{{ username }}'
-      cloud_environment: '{{ cloudenv }}'
-      location: '{{ azuredc }}'
+      location: '{{ location }}'
       managed_disk_type: Standard_LRS
       name: '{{ appserver }}'
       network_interface_names: '{{ appserver }}-nic'
       os_type: Linux
-      resource_group: '{{ rgname }}'
+      resource_group: '{{ resource_group }}'
       short_hostname: '{{ appserver }}'
       vm_size: Standard_DS3_v2
       ssh_password_enabled: false
       ssh_public_keys:
         - path: /home/{{ username }}/.ssh/authorized_keys
-          key_data: "REPLACE"
+          key_data: "{{ public_key }}"
       image:
         offer: RHEL
         publisher: RedHat
@@ -132,19 +121,18 @@
   - name: Create Mattermost Database Server VM
     azure_rm_virtualmachine:
       admin_username: '{{ username }}'
-      cloud_environment: '{{ cloudenv }}'
-      location: '{{ azuredc }}'
+      location: '{{ location }}'
       managed_disk_type: Standard_LRS
       name: '{{ dbserver }}'
       network_interface_names: '{{ dbserver }}-nic'
       os_type: Linux
-      resource_group: '{{ rgname }}'
+      resource_group: '{{ resource_group }}'
       short_hostname: '{{ dbserver }}'
       vm_size: Standard_DS3_v2
       ssh_password_enabled: false
       ssh_public_keys:
         - path: /home/{{ username }}/.ssh/authorized_keys
-          key_data: "REPLACE"
+          key_data: "{{ public_key }}"
       image:
         offer: RHEL
         publisher: RedHat
