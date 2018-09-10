@@ -96,7 +96,6 @@
   - name: Create Mattermost Server & Proxy VM
     azure_rm_virtualmachine:
       admin_username: "{{ username }}"
-      #admin_password: mmpass
       location: '{{ location }}'
       managed_disk_type: Standard_LRS
       name: '{{ appserver }}'
