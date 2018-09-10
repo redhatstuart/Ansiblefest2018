@@ -7,7 +7,7 @@
     appserverdns: mm-app-demo
     dbserver: mm-db-demo
     dbserverdns: mm-db-demo
-    username: mmuser
+    username: zim
 
   tasks:
   - name: Create Mattermost VNet
@@ -95,7 +95,8 @@
 
   - name: Create Mattermost Server & Proxy VM
     azure_rm_virtualmachine:
-      admin_username: '{{ username }}'
+      admin_username: "{{ username }}"
+      #admin_password: mmpass
       location: '{{ location }}'
       managed_disk_type: Standard_LRS
       name: '{{ appserver }}'
@@ -107,7 +108,7 @@
       ssh_password_enabled: false
       ssh_public_keys:
         - path: /home/{{ username }}/.ssh/authorized_keys
-          key_data: "{{ public_key }}"
+          key_data: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
       image:
         offer: RHEL
         publisher: RedHat
@@ -132,7 +133,7 @@
       ssh_password_enabled: false
       ssh_public_keys:
         - path: /home/{{ username }}/.ssh/authorized_keys
-          key_data: "{{ public_key }}"
+          key_data:  "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
       image:
         offer: RHEL
         publisher: RedHat
