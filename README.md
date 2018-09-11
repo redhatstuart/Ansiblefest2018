@@ -32,7 +32,7 @@ This file contains all the variables shared by demo tasks:
 
 ## Playbooks
 
-### prerequisites.yml
+### 00-prerequisites.yml
 
 Should be run before the event.
 
@@ -41,37 +41,29 @@ It will create all required prerequisites:
 
 TODO: decide what prerequisites we actually need
 
-### create-vm-using-playbook.yml
+### 01-mm-vm-deploy.yml
 
-This task can / will be replaced by other task (creating VM using template).
-Currently it does following:
-- installs prerequisites for the virtual machine
-- creates virtual machine
+- deploys VM for Mattermost Application
 
-TODO: make sure VM is added to hosts
+### 02-mm-vm-deploy.yml
 
-### install-java-app-on-vm.yml
+- creates MySQL Server
+- creates **mattermost** database
+- creates appropriate firewall rule for Mattermost VM
 
-This task does following things:
-- obtains IP address of vm by it's name **vm_name**
-- add host to the list (this and previous task should be probably done beforehand)
-- clones and builds the application on local host
-- installs JRE on the virtual machine
-- copies the application to the virtual machine
-- runs the application on the remote machine
+### 03-mm-setup.yml
 
-TODO: VM should be added to hosts beforehand
-TODO: make sure application is automatically started when VM is restarted
-TODO: check what application we actually want to run
+- sets up Mattermost on VM server
 
-### create-vm-image.yml
+### 04-create-vm-image.yml
 
-This task will take existing VM and:
-- stop it
-- generalize it (using REST API)
-- create image
+- stops VM with Mattermost
+- generalizes it (using REST API)
+- creates image
 
-### vmss-create.yml
+TODO: remove Mattermost VM??
+
+### 05-vmss-create.yml
 
 This task creates:
 - load balancer
@@ -83,12 +75,6 @@ and currently also a few prerequisites:
 - public ip address
 - network security group
 
-I think these can be moved to prerequisites, as they could be reused by all the other tasks before.
+### 06-appgateway-create.yml
 
-TODO: I think we shouldn't create load balancer here, instead application gateway should take over this role in the next task.
-
-### appgateway-create.yml
-
-This taks creates Application Gateway.
-
-TODO: this task requires some more work
+This task creates application gateway, but us still not connected to the scaleset.
