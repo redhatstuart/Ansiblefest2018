@@ -61,7 +61,7 @@
         mode: "g+w"
 
     - name: Configure Mattermost Data Source
-      command: "/bin/sed -i s+mostest@tcp(dockerhost:3306)/mattermost_test+{{ mysql_password }}@tcp({{ mysql_server_name }}.mysql.database.azure.com:3306)/{{ mysql_database_name }}+g /opt/mattermost/config/config.json"
+      command: "/bin/sed -i s+:mostest@tcp(dockerhost:3306)/mattermost_test+@{{ mysql_server_name }}:{{ mysql_password }}@tcp({{ mysql_server_name }}.mysql.database.azure.com:3306)/{{ mysql_database_name }}+g /opt/mattermost/config/config.json"
 
     - name: Downloading systemd service script for Mattermost
       get_url:
