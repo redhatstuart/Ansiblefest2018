@@ -29,13 +29,6 @@
       allocation_method: Static
       domain_name: '{{ appserverdns }}'
 
-  - name: Create Mattermost Database Server VM Public IP Address
-    azure_rm_publicipaddress:
-      resource_group: '{{ resource_group }}'
-      name: '{{ dbserver }}-pip'
-      allocation_method: Static
-      domain_name: '{{ dbserverdns }}'
-
   - name: Create Mattermost Server & Proxy NSG
     azure_rm_securitygroup:
       resource_group: '{{ resource_group }}'
@@ -54,24 +47,6 @@
             priority: 1011
             protocol: Tcp
 
-  - name: Create Database Server NSG
-    azure_rm_securitygroup:
-      resource_group: '{{ resource_group }}'
-      name: '{{ dbserver }}-nsg'
-      rules:
-          - name: 'AllowMySQL'
-            access: Allow
-            destination_port_range: 3306
-            direction: Inbound
-            priority: 1010
-            protocol: Tcp
-          - name: 'AllowSSH'
-            access: Allow
-            destination_port_range: 22
-            direction: Inbound
-            priority: 1011
-            protocol: Tcp
-
   - name: Create Mattermost Server & Proxy VM NIC
     azure_rm_networkinterface:
       name: '{{ vm_name }}-nic'
@@ -79,16 +54,6 @@
       public_ip_address_name: '{{ vm_name }}-pip'
       resource_group: '{{ resource_group }}'
       security_group_name: '{{ vm_name }}-nsg'
-      subnet_name: MMSubnet
-      virtual_network_name: MMVnet
-
-  - name: Create Mattermost Database Server VM NIC
-    azure_rm_networkinterface:
-      name: '{{ dbserver }}-nic'
-      os_type: Linux
-      public_ip_address_name: '{{ dbserver }}-pip'
-      resource_group: '{{ resource_group }}'
-      security_group_name: '{{ dbserver }}-nsg'
       subnet_name: MMSubnet
       virtual_network_name: MMVnet
 
@@ -117,27 +82,21 @@
           disk_size_gb: 100
           managed_disk_type: Premium_LRS
 
-  - name: Create Mattermost Database Server VM
-    azure_rm_virtualmachine:
-      admin_username: '{{ username }}'
-      location: '{{ location }}'
-      managed_disk_type: Standard_LRS
-      name: '{{ dbserver }}'
-      network_interface_names: '{{ dbserver }}-nic'
-      os_type: Linux
-      resource_group: '{{ resource_group }}'
-      short_hostname: '{{ dbserver }}'
-      vm_size: Standard_DS3_v2
-      ssh_password_enabled: false
-      ssh_public_keys:
-        - path: /home/{{ username }}/.ssh/authorized_keys
-          key_data:  "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-      image:
-        offer: RHEL
-        publisher: RedHat
-        sku: '7-LVM'
-        version: 7.4.2018010506
-      data_disks:
-        - lun: 0
-          disk_size_gb: 100
-          managed_disk_type: Premium_LRS
+  - name: Create PostgreSQL Server
+    azure_rm_mysqlserver:
+      resource_group: "{{ resource_group }}"
+      name: mmmysqlansiblefest
+      sku:
+        name: B_Gen5_1
+        tier: Basic
+      location: "{{ location }}"
+      enforce_ssl: True
+      admin_username: mmuser
+      admin_password: Testpasswordxyz12!
+      storage_mb: 51200
+
+  - name: Create instance of MySQL Database
+    azure_rm_mysqldatabase:
+      resource_group: "{{ resource_group }}"
+      server_name: mmmysqlansiblefest
+      name: mattermost

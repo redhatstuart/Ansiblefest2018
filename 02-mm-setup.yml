@@ -61,7 +61,7 @@
         mode: "g+w"
 
     - name: Configure Mattermost Data Source
-      command: "/bin/sed -i s+mostest@tcp(dockerhost:3306)/mattermost_test+mmuser-password@tcp(mm-db-demo.eastus2.cloudapp.azure.com:3306)/mattermost+g /opt/mattermost/config/config.json"
+      command: "/bin/sed -i s+mostest@tcp(dockerhost:3306)/mattermost_test+zims-Testpasswordxyz12!@tcp(mmmysqlansiblefest.sql.azure.com:3306)/mattermost+g /opt/mattermost/config/config.json"
 
     - name: Downloading systemd service script for Mattermost
       get_url:
