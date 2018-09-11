@@ -81,22 +81,3 @@
         - lun: 0
           disk_size_gb: 100
           managed_disk_type: Premium_LRS
-
-  - name: Create PostgreSQL Server
-    azure_rm_mysqlserver:
-      resource_group: "{{ resource_group }}"
-      name: mmmysqlansiblefest
-      sku:
-        name: B_Gen5_1
-        tier: Basic
-      location: "{{ location }}"
-      enforce_ssl: True
-      admin_username: mmuser
-      admin_password: Testpasswordxyz12!
-      storage_mb: 51200
-
-  - name: Create instance of MySQL Database
-    azure_rm_mysqldatabase:
-      resource_group: "{{ resource_group }}"
-      server_name: mmmysqlansiblefest
-      name: mattermost
