@@ -60,11 +60,6 @@
         natpool_frontend_port_end: 50040
         natpool_backend_port: 22
         natpool_protocol: Tcp
-      register: output
-
-    - debug:
-        var: output
-
     - name: Create VMSS
       azure_rm_virtualmachine_scaleset:
         resource_group: "{{ resource_group }}"
