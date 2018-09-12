@@ -80,7 +80,9 @@
           resource_group: "{{ resource_group }}"
         load_balancer: "{{ vmss_name }}lb"
 
-
+    #
+    # These tashs won't be necessary if we reuse Virtual Network and Public IP Address from previous tasks
+    #
     - name: Getting Public IP address of the LB
       azure_rm_publicipaddress_facts:
         resource_group: "{{ resource_group }}"
