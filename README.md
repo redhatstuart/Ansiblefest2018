@@ -75,6 +75,8 @@ and currently also a few prerequisites:
 - public ip address
 - network security group
 
+TODO: Reuse networking infrastructure from previous tasks
+
 ### 06-appgateway-create.yml
 
 This task creates application gateway, but us still not connected to the scaleset.
