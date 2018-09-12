@@ -48,18 +48,22 @@
         resource_group: "{{ resource_group }}"
         public_ip: "{{ vmss_name }}"
         probe_protocol: Tcp
-        probe_port: 8080
+        probe_port: 8065
         probe_interval: 10
         probe_fail_count: 3
         protocol: Tcp
         load_distribution: Default
         frontend_port: 80
-        backend_port: 8080
+        backend_port: 8065
         idle_timeout: 4
         natpool_frontend_port_start: 50000
         natpool_frontend_port_end: 50040
         natpool_backend_port: 22
         natpool_protocol: Tcp
+      register: output
+
+    - debug:
+        var: output
 
     - name: Create VMSS
       azure_rm_virtualmachine_scaleset:
@@ -80,3 +84,25 @@
           name: "{{ vm_image_name }}"
           resource_group: "{{ resource_group }}"
         load_balancer: "{{ vmss_name }}lb"
+
+
+    - name: Getting Public IP address of the LB
+      azure_rm_publicipaddress_facts:
+        resource_group: "{{ resource_group }}"
+        name: "{{ vmss_name }}"
+      register: output
+
+    - name: Call REST API - FirewallRules_CreateOrUpdate
+      azure_rm_resource:
+        api_version: '2017-12-01'
+        resource_group: "{{ resource_group }}"
+        provider: dbformysql
+        resource_type: servers
+        resource_name: "{{ mysql_server_name }}"
+        subresource:
+          - type: firewallrules
+            name: vmss
+        body:
+          properties: 
+            startIpAddress: "{{ output.ansible_facts.azure_publicipaddresses[0].properties.ipAddress }}"
+            endIpAddress: "{{ output.ansible_facts.azure_publicipaddresses[0].properties.ipAddress }}"
