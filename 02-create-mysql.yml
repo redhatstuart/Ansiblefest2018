@@ -3,7 +3,7 @@
   connection: local
 
   tasks:
-  - name: Create PostgreSQL Server
+  - name: Create MySQL Server for Mattermost Database
     azure_rm_mysqlserver:
       resource_group: "{{ resource_group }}"
       name: mmmysqlansiblefest
