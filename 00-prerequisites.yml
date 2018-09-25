@@ -20,19 +20,31 @@
         name: "{{ resource_group }}"
         location: "{{ location }}"
 
-    - name: Create Mattermost VNet
+    - name: Create Virtual Network
       azure_rm_virtualnetwork:
         resource_group: '{{ resource_group }}'
-        name: MMVNet
+        name: "{{ vnet_name }}"
         address_prefixes: "10.10.0.0/16"
 
-    - name: Create Mattermost Subnet
+    - name: Create Subnet
       azure_rm_subnet:
         resource_group: '{{ resource_group }}'
-        name: MMSubnet
+        name: "{{ subnet_name }}"
         address_prefix: "10.10.0.0/24"
-        virtual_network: MMVNet
+        virtual_network: "{{ vnet_name }}"
       register: subnet_output
+
+    - name: Create a public IP address 
+      azure_rm_publicipaddress:
+        resource_group: "{{ resource_group }}"  
+        allocation_method: Dynamic 
+        name: "{{ appgateway_public_ip_name }}" 
+        domain_name_label: "{{ appgateway_public_ip_name }}"  
+      register: pip_output
+
+    - name: dump public ip configuration
+      debug:
+        var: pip_output
 
     - name: Create instance of Application Gateway
       azure_rm_appgateway:
@@ -61,12 +73,13 @@
               id: "{{ subnet_output.state.id }}"
             name: app_gateway_ip_config
         frontend_ip_configurations:
-          - subnet:
-              id: "{{ subnet_output.state.id }}"
+          - public_ip_address: appgwpublicip
             name: sample_gateway_frontend_ip_config
         frontend_ports:
-          - port: 90
-            name: ag_frontend_port
+          - port: 80
+            name: frontend_port_http
+          - port: 443
+            name: frontend_port_https
         backend_address_pools:
           - backend_addresses:
               - ip_address: 10.0.0.4
@@ -78,8 +91,13 @@
             name: sample_appgateway_http_settings
         http_listeners:
           - frontend_ip_configuration: sample_gateway_frontend_ip_config
-            frontend_port: ag_frontend_port
+            frontend_port: frontend_port_http
             name: sample_http_listener
+          - frontend_ip_configuration: sample_gateway_frontend_ip_config
+            frontend_port: frontend_port_https
+            name: sample_https_listener
+            protocol: https
+            ssl_certificate: cert2
         request_routing_rules:
           - rule_type: Basic
             backend_address_pool: test_backend_address_pool

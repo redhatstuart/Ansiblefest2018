@@ -10,3 +10,7 @@ mysql_username: mmuser
 mysql_password: Testpasswordxyz12!
 mysql_server_name: mmmysqlansiblefest
 mysql_database_name: mattermost
+appgateway_name: mattermostag
+vnet_name: agvnet
+subnet_name: agsubnet
+appgateway_public_ip_name: appgwpublicip
