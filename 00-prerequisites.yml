@@ -85,7 +85,7 @@
             #  - ip_address: 10.0.0.4
             name: test_backend_address_pool
         backend_http_settings_collection:
-          - port: 80
+          - port: 8065
             protocol: http
             cookie_based_affinity: enabled
             name: sample_appgateway_http_settings
