@@ -78,8 +78,8 @@
         frontend_ports:
           - port: 80
             name: frontend_port_http
-          - port: 443
-            name: frontend_port_https
+          #- port: 443
+          #  name: frontend_port_https
         backend_address_pools:
           - backend_addresses:
             #  - ip_address: 10.0.0.4
@@ -93,11 +93,11 @@
           - frontend_ip_configuration: sample_gateway_frontend_ip_config
             frontend_port: frontend_port_http
             name: sample_http_listener
-          - frontend_ip_configuration: sample_gateway_frontend_ip_config
-            frontend_port: frontend_port_https
-            name: sample_https_listener
-            protocol: https
-            ssl_certificate: cert2
+          #- frontend_ip_configuration: sample_gateway_frontend_ip_config
+          #  frontend_port: frontend_port_https
+          #  name: sample_https_listener
+          #  protocol: https
+          #  ssl_certificate: cert2
         request_routing_rules:
           - rule_type: Basic
             backend_address_pool: test_backend_address_pool
