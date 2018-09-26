@@ -1,0 +1,15 @@
+- hosts: localhost
+  tasks:
+
+    - name: Get scaleset
+      azure_rm_resource_facts:
+        # url: /subscriptions/{{ lookup('env','AZURE_SUBSCRIPTION_ID') }}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachineScaleSets/{vmScaleSetName}
+        api_version: '2017-03-30'
+        resource_group: "{{ resource_group }}"
+        provider: compute
+        resource_type: virtualmachinescalesets
+        resource_name: "{{ vmss_name }}"
+      register: output
+
+    - debug:
+        var: output
