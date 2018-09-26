@@ -82,7 +82,7 @@
             name: frontend_port_https
         backend_address_pools:
           - backend_addresses:
-              - ip_address: 10.0.0.4
+            #  - ip_address: 10.0.0.4
             name: test_backend_address_pool
         backend_http_settings_collection:
           - port: 80
