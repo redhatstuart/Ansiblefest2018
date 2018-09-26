@@ -17,7 +17,7 @@
         body:
           sku: 
             tier: Standard
-            capacity: 2
+            capacity: 4
             name: Standard_DS1_v2
           location: "{{ location }}"
           properties: 
