@@ -1,22 +1,16 @@
 # Description
 # ===========
-# This playbook creates a Virtual Machine Scaleset.
-# It also requires following env variables to be defined:
-# - VMSS_ADMIN_USERNAME
-# - VMSS_ADMIN_PASSWORD
-# This sample requires Ansible 2.6 
+# This playbook creates:
+# - subnet (in the same virtual network as app gateway from pre-requisites)
+# - public ip
+# - load balancer
+# - virtual machine scaleset
 
 ---
 - hosts: localhost
   tasks:
 
-    #- name: Create virtual network
-    #  azure_rm_virtualnetwork:
-    #    resource_group: "{{ resource_group }}"
-    #    name: "{{ vmss_name }}"
-    #    address_prefixes: "10.0.0.0/16"
-
-    - name: Add subnet
+    - name: Add subnet to existing virtual network
       azure_rm_subnet:
         resource_group: "{{ resource_group }}"
         name: "{{ vmss_name }}"
