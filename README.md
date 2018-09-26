@@ -19,18 +19,33 @@ Application Gateway?
 
 This file contains all the variables shared by demo tasks:
 
-|Variable      |Description                                    |
-|--------------|-----------------------------------------------|
-|resource_group|This is the resource group name used by demos  |
-|location      |Region where resources should be created       |
-|vm_name       |Virtual machine name that contains application |
-|vm_image_name |Name of target image used in the demo          |
-|admin_username|VMSS admin user name                           |
-|admin_password|VMSS admin password                            |
-|vmss_name     |VMSS name                                      |
-
+|Variable                 |Description                                    |
+|-------------------------|-----------------------------------------------|
+|resource_group           |This is the resource group name used by demos  |
+|location                 |Region where resources should be created       |
+|vm_name                  |Virtual machine name that contains application |
+|vm_image_name            |Name of target image used in the demo          |
+|admin_username           |VMSS admin user name                           |
+|admin_password           |VMSS admin password                            |
+|vmss_name                |VMSS name                                      |
+|mysql_username           |MySQL user name                                |
+|mysql_password           |MySQL password                                 |
+|mysql_server_name        |MySQL server name                              |
+|mysql_database_name      |MySQL database name (should be: mattermost)    |
+|appgateway_name          |Application Gateway name                       |
+|vnet_name                |Virtual network name                           |
+|subnet_name              |Application Gateway subnet name                |
+|vm_publicip_name         |Virtual Machine public IP name                 |
+|vmss_publicip_name       |Load balancer public IP name                   |
+|appgateway_public_ip_name|App Gateway public IP name                     |
 
 ## Playbooks
+
+### How to run?
+
+```
+ansible-playbook 0x-xxxxxx.yml -e @vars.yml
+```
 
 ### 00-prerequisites.yml
 
