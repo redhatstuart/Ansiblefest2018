@@ -9,7 +9,7 @@
     - name: Getting Public IP
       azure_rm_publicipaddress_facts:
         resource_group: "{{ resource_group }}"
-        name: '{{ vm_name }}-pip'
+        name: '{{ vm_publicip_name }}'
       register: output
 
     - name: Adding public IP to hosts
