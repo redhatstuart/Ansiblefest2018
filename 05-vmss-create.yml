@@ -10,18 +10,18 @@
 - hosts: localhost
   tasks:
 
-    - name: Create virtual network
-      azure_rm_virtualnetwork:
-        resource_group: "{{ resource_group }}"
-        name: "{{ vmss_name }}"
-        address_prefixes: "10.0.0.0/16"
+    #- name: Create virtual network
+    #  azure_rm_virtualnetwork:
+    #    resource_group: "{{ resource_group }}"
+    #    name: "{{ vmss_name }}"
+    #    address_prefixes: "10.0.0.0/16"
 
     - name: Add subnet
       azure_rm_subnet:
         resource_group: "{{ resource_group }}"
         name: "{{ vmss_name }}"
-        address_prefix: "10.0.1.0/24"
-        virtual_network: "{{ vmss_name }}"
+        address_prefix: "10.10.1.0/24"
+        virtual_network: "{{ vnet_name }}"
 
     - name: Create public IP address
       azure_rm_publicipaddress:
@@ -60,6 +60,7 @@
         natpool_frontend_port_end: 50040
         natpool_backend_port: 22
         natpool_protocol: Tcp
+
     - name: Create VMSS
       azure_rm_virtualmachine_scaleset:
         resource_group: "{{ resource_group }}"
@@ -69,7 +70,7 @@
         admin_password: "{{ admin_password }}"
         ssh_password_enabled: true
         capacity: 2
-        virtual_network_name: "{{ vmss_name }}"
+        virtual_network_name: "{{ vnet_name }}"
         subnet_name: "{{ vmss_name }}"
         upgrade_policy: Manual
         tier: Standard
