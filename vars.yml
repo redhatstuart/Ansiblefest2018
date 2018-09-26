@@ -4,7 +4,7 @@ location: eastus
 vm_name: ansiblefestvm
 vm_image_name: ansiblefestvmimage
 vmss_name: vmsstest
-admin_username: zim #"{{ lookup('env','VMSS_ADMIN_USERNAME') }}"
+admin_username: afaustin #"{{ lookup('env','VMSS_ADMIN_USERNAME') }}"
 admin_password: Password123!! #"{{ lookup('env','VMSS_ADMIN_PASSWORD') }}"
 mysql_username: mmuser
 mysql_password: Testpasswordxyz12!
