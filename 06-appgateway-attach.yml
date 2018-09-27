@@ -51,3 +51,12 @@
             upgradePolicy: 
               mode: Manual
     
+    - name: Getting Public IP address of the LB
+      azure_rm_publicipaddress_facts:
+        resource_group: "{{ resource_group }}"
+        name: "{{ appgateway_public_ip_name }}"
+      register: output
+
+    - name: Dump Application Gateway Public IP
+      debug:
+        msg: "FQDN: {{ output.ansible_facts.azure_publicipaddresses[0].properties.dnsSettings.fqdn }}"
