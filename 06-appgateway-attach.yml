@@ -51,7 +51,7 @@
             upgradePolicy: 
               mode: Manual
     
-    - name: Getting Public IP address of the LB
+    - name: Getting Public IP address of the Application Gateway
       azure_rm_publicipaddress_facts:
         resource_group: "{{ resource_group }}"
         name: "{{ appgateway_public_ip_name }}"
