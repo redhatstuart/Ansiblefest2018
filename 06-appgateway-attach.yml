@@ -32,12 +32,12 @@
                     storageAccountType: Standard_LRS
                   createOption: FromImage
               osProfile: 
-                computerNamePrefix: vmsstest
+                computerNamePrefix: "{{ vmss_name }}"
                 adminUsername: "{{ admin_username }}"
                 adminPassword: "{{ admin_password }}"
               networkProfile: 
                 networkInterfaceConfigurations: 
-                  - name: vmsstest
+                  - name: "{{ vmss_name }}"
                     properties: 
                       primary: true
                       enableIPForwarding: true
